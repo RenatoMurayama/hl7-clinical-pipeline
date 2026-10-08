@@ -27,6 +27,8 @@ ISSUE_RATE = 0.05  # 5% chance of a data quality issue
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = PROJECT_ROOT / "data" / "raw"
 FACILITY = "HOSP_BRAGA"
+RECEIVING_APP = "CLINICAL_DW"        # our data warehouse
+RECEIVING_FACILITY = "DATA_PLATFORM"
 
 fake = Faker("pt_PT")
 Faker.seed(SEED)
@@ -73,7 +75,7 @@ def segment(name, fields):
 
 def msh(app, msg_type, msg_id, when):
     return segment("MSH", {
-        2: "^~\\&", 3: app, 4: FACILITY, 5: "KNOK", 6: "KNOK",
+        2: "^~\\&", 3: app, 4: FACILITY, 5: RECEIVING_APP, 6: RECEIVING_FACILITY,
         7: hl7_ts(when), 9: msg_type, 10: msg_id, 11: "P", 12: "2.5",
         18: "UNICODE UTF-8",
     })
