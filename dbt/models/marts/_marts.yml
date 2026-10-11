@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: dim_patient
+    description: "Patient dimension, one row per patient. No names (GDPR data minimisation)."
+    columns:
+      - name: patient_mrn
+        data_tests: [unique, not_null]
+      - name: sex
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['M', 'F']
+      - name: age_group
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['18-39', '40-64', '65+', 'Unknown']
+
+  - name: fct_lab_results
+    description: "Lab results fact table, one row per result, classified against reference ranges."
+    columns:
+      - name: lab_result_id
+        data_tests: [unique, not_null]
+      - name: patient_mrn
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_patient')
+                field: patient_mrn
+      - name: result_category
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Low', 'Normal', 'High', 'Missing']
