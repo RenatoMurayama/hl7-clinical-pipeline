@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: adt_admissions
+      - name: siu_appointments
+      - name: oru_lab_results

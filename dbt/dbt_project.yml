@@ -1,0 +1,15 @@
+name: hl7_clinical
+version: "1.0.0"
+profile: hl7_clinical
+
+model-paths: ["models"]
+test-paths: ["tests"]
+
+models:
+  hl7_clinical:
+    staging:
+      +schema: staging
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table
