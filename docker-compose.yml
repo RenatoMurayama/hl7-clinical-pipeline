@@ -15,5 +15,26 @@ services:
       interval: 5s
       retries: 5
 
+  airflow:
+    build: ./airflow
+    image: hl7-airflow
+    container_name: hl7_airflow
+    command: standalone
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      POSTGRES_HOST: postgres
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/airflow
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - .:/opt/project
+    ports:
+      - "8080:8080"
+
 volumes:
   pgdata:
